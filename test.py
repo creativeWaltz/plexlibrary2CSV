@@ -27,28 +27,20 @@ for library_list in movies:
 
 
 
-#print(movie_list)
-print("\nLength of movie list is ",len(movie_list))
+print(movie_list)
+print("\n length of movie list is ", len(movie_list))
 
-full_list = []
-for plexlib in movies:
-	for film in plexlib:
-		full_list.append(film.media)
-
-for i in range(len(movie_list)):
-	for media in full_list[i]:
-		movie_list[i].update({
-			"Bitrate":media.bitrate, 
-			"Container":media.container,
-			"Duration(mins)":round((media.duration*0.00001666667))
-			})
-
+for library_list in movies:
+	for movie in library_list:
+		for media in movie.media:
+			for movie in movie_list:
+				movie.update({"Bitrate" : media.bitrate})
 
 		
-#print(full_list)
-print(movie_list)
 
 
 
+
+print(movie_list[0])
 
 
