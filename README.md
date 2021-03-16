@@ -1,2 +1,2 @@
-# plexlibrary2CSV
+# Plexlibrary2CSV
  Exports your Plex Libraries to CSVs
