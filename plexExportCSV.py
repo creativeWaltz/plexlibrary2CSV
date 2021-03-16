@@ -17,7 +17,7 @@ print("""
 #Your plex credentials
 PLEX_URL = 'http://192.168.0.2:32400'
 PLEX_TOKEN = 'mL5Y3ttWity3xv5gTJCR'
-MOVIE_LIBRARIES = ['Test','Test2']
+MOVIE_LIBRARIES = ['Test','Test2'] #Add your movie libraries here, same as they are called in plex
 
 #Create plex server instance
 plex = PlexServer(PLEX_URL, PLEX_TOKEN)
@@ -29,6 +29,7 @@ movies = [plex.library.section(library).all() for library in MOVIE_LIBRARIES]
 movie_list = []
 
 
+#Create the initial list of dictionaries using the Movie object from plexapi
 for library_list in movies:
 	for movie in library_list:
 		movie_list.append({
@@ -48,6 +49,7 @@ print("\nGenerating movie list from selected libraries...")
 print("\nThere are a total of ",len(movie_list), "movies in the selected libraries" )
 
 
+#Add the extra information from the media object from each movie
 full_list = []
 for plexlib in movies:
 	for film in plexlib:
@@ -66,11 +68,13 @@ for i in range(len(movie_list)):
 			"Width": media.width,
 			"Audio Channels": media.audioChannels,
 			"Audio Codec": media.audioCodec,
-			"Audio Profile": media.audioProfile,
+			"Audio Profile": media.audioProfile
 			})
 
+#Add the location of the movies from the mediapart object from media object
 
 
+#Create the labels from they keys of the dictionary of the first movie
 labels = [key for key in movie_list[0]]
 
 #Write the dictionary to a csv
