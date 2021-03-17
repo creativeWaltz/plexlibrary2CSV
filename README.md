@@ -1,2 +1,2 @@
 # PlexExportCSV
- Exports your Plex Libraries to CSVs
+ Exports your movies to CSVs
