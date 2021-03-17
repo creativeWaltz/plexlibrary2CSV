@@ -5,9 +5,9 @@ import csv
 
 
 #Your plex credentials
-PLEX_URL = 'http://192.168.0.2:32400'
-PLEX_TOKEN = 'mL5Y3ttWity3xv5gTJCR'
-MOVIE_LIBRARIES = ['Films'] #Add your movie libraries here, same as they are called in plex
+PLEX_URL = 'http://192.168.0.1:32400'
+PLEX_TOKEN = 'XXXXXXXXXXXXXXXXXXXX'      #get info on a movie then click 'view xml'. You will find token at the end of the URL
+MOVIE_LIBRARIES = ['Test'] #Add your movie libraries here, same as they are called in plex
 
 #Create plex server instance
 plex = PlexServer(PLEX_URL, PLEX_TOKEN)
@@ -17,7 +17,7 @@ print("\nGenerating movie list from selected libraries,please wait...")
 
 #Get list of movies in MOVIE_LIBRARIES
 #ovies = []
-movies = [plex.library.section(library).all() for library in MOVIE_LIBRARIES]
+movies = [plex.library.section(library).all() for library in MOVIE_LIBRARIES] #use plexapi to get a list of all movies in libraries
 movie_list = []
 
 
@@ -36,7 +36,7 @@ for library_list in movies:
 						   })
 
 
-#Add the extra information from the media object from each movie
+#Add the extra information from the media object from each movie, update dictionary with new attributes
 media_object_list = []
 for plexlib in movies:
 	for film in plexlib:
@@ -54,14 +54,14 @@ for i in range(len(movie_list)):
 			"Audio Codec": media.audioCodec
 			})
 
-#Add the location of the movies from the mediapart object from media object
+#Add the location and of the movies from the mediapart object from mediapart object, add to dictionary
 
 for i in range(len(movie_list)):
 	for media in media_object_list[i]:
 		for parts in media.parts:
 			movie_list[i].update({
 				"Size (GB)" : round(parts.size/1073741824,2),
-				"LocationOnDisk": part.file
+				"LocationOnDisk": parts.file
 				})
 		
 				
