@@ -5,9 +5,9 @@ import csv
 
 
 #Your plex credentials
-PLEX_URL = 'http://192.168.0.2:32400'
-PLEX_TOKEN = 'mL5Y3ttWity3xv5gTJCR'
-MOVIE_LIBRARIES = ['Films'] #Add your movie libraries here, same as they are called in plex
+PLEX_URL = 'http://192.168.0.1:32400'
+PLEX_TOKEN = 'XXXXXXXXXXXXXXXXXX'
+MOVIE_LIBRARIES = ['Test'] #Add your movie libraries here, same as they are called in plex
 
 #Create plex server instance
 plex = PlexServer(PLEX_URL, PLEX_TOKEN)
@@ -61,7 +61,7 @@ for i in range(len(movie_list)):
 		for parts in media.parts:
 			movie_list[i].update({
 				"Size (GB)" : round(parts.size/1073741824,2),
-				"LocationOnDisk": part.file
+				"LocationOnDisk": parts.file
 				})
 		
 				
