@@ -3,7 +3,7 @@ from plexapi.server import PlexServer
 # from plexapi.media import Media
 import csv
 
-#Import your custom config/auth file:
+# Import your custom config/auth file:
 import plexExportCSV_config
 
 # Your plex credentials
@@ -20,7 +20,7 @@ print("\nGenerating movie list from selected libraries,please wait...")
 
 # Get list of movies in MOVIE_LIBRARIES
 # movies = []
-movies = [plex.library.section(library).all() for library in MOVIE_LIBRARIES] #use plexapi to get a list of all movies in libraries
+movies = [plex.library.section(library).all() for library in MOVIE_LIBRARIES]
 movie_list = []
 
 # Create the initial list of dictionaries using the Movie object from plexapi
@@ -51,7 +51,7 @@ for i in range(len(movie_list)):
             "Video Codec": media.videoCodec,
             "Video Profile": media.videoProfile,
             "Container": media.container,
-            "Apsect Ratio": media.aspectRatio,
+            "Aspect Ratio": media.aspectRatio,
             "Audio Channels": media.audioChannels,
             "Audio Codec": media.audioCodec
             })
@@ -61,14 +61,14 @@ for i in range(len(movie_list)):
     for media in media_object_list[i]:
         for parts in media.parts:
             movie_list[i].update({
-                "Size (GB)" : round(parts.size/1073741824,2),
+                "Size (GB)": round(parts.size/1073741824, 2),
                 "LocationOnDisk": parts.file
                 })
 
 # Create the labels from they keys of the dictionary of the first movie
 labels = [key for key in movie_list[0]]
 
-print("\nThere are a total of ",len(movie_list), "movies in the selected libraries" )
+print("\nThere are a total of ", len(movie_list), "movies in the selected libraries")
 
 # Write the dictionary to a csv
 try:
