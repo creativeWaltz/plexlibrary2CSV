@@ -2,12 +2,17 @@
 from plexapi.server import PlexServer
 from plexapi.media import Media
 import csv
+import sys
+
+#Import your custom config/auth file:
+import plexExportCSV_config
 
 
 #Your plex credentials
-PLEX_URL = 'http://192.168.0.1:32400'
-PLEX_TOKEN = 'XXXXXXXXXXXXXXXXXXXX'      #get info on a movie then click 'view xml'. You will find token at the end of the URL
-MOVIE_LIBRARIES = ['Test'] #Add your movie libraries here, same as they are called in plex
+PLEX_URL = plexExportCSV_config.PLEX_URL
+PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
+
+MOVIE_LIBRARIES = ['movies'] #Add your movie libraries here, same as they are called in plex
 
 #Create plex server instance
 plex = PlexServer(PLEX_URL, PLEX_TOKEN)
