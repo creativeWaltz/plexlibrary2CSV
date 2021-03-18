@@ -5,7 +5,7 @@ import csv
 
 
 #Your plex credentials
-PLEX_URL = 'http://192.168.0.1:32400'
+PLEX_URL = 'http://192.168.0.0:32400'
 PLEX_TOKEN = 'XXXXXXXXXXXXXXXXXX'
 MOVIE_LIBRARIES = ['Test'] #Add your movie libraries here, same as they are called in plex
 
