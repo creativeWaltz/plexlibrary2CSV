@@ -2,7 +2,6 @@
 from plexapi.server import PlexServer
 # from plexapi.media import Media
 import csv
-
 from datetime import datetime
 
 # Import your custom config/auth file:
@@ -71,6 +70,6 @@ try:
         writer.writeheader()
         for elem in movie_list:
             writer.writerow(elem)
-    print("Your CSV is ready!...")
+    print('Your CSV is ready!...')
 except IOError:
     print("I/O error")
