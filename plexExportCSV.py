@@ -20,17 +20,23 @@ print("\nConnecting to your server...")
 print("\nGenerating movie list from selected libraries,please wait...")
 
 
-# Function to create movie object list from selected movie libraries
+# Functions
+def genre_string(genre_list: list) -> str:
+    tidy_list = []
+    for genre in genre_list:
+        tidy_list.append(genre.tag)
+    new_string = ":".join(tidy_list)
+    return new_string
 
 
-def create_movie_object_list(plex_movie_libraries):
+def create_movie_object_list(plex_movie_libraries: list) -> list:
     object_list = []
     for library in plex_movie_libraries:
         object_list.extend(plex.library.section(library).all())
     return object_list
 
 
-def create_movie_dictionary(object_list):
+def create_movie_dictionary(object_list: list) -> list:
     movielist = []
     for i in range(len(object_list)):
         movielist.append({
@@ -39,7 +45,7 @@ def create_movie_dictionary(object_list):
             "Year": object_list[i].year,
             "Duration(minutes)": round((object_list[i].duration * 0.00001666667)),
             "Rating": object_list[i].rating,
-            "Genres": object_list[i].genres,
+            "Genres": genre_string(object_list[i].genres),
             "Studio": object_list[i].studio,
             "Content Rating": object_list[i].contentRating,
             "Video Resolution": object_list[i].media[0].videoResolution,
