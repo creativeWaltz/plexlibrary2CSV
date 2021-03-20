@@ -1,7 +1,7 @@
 from plexapi.server import PlexServer
+from datetime import datetime
 import plexapi.exceptions
 import csv
-from datetime import datetime
 import sys
 import plexExportCSV_config
 import requests
@@ -27,10 +27,10 @@ except requests.exceptions.ConnectTimeout:
 
 
 # Functions
-def genre_string(genre_list: list) -> str:
+def property_list_to_string(property_list: list) -> str:
     tidy_list = []
-    for genre in genre_list:
-        tidy_list.append(genre.tag)
+    for item in property_list:
+        tidy_list.append(item.tag)
     new_string = ":".join(tidy_list)
     return new_string
 
@@ -47,11 +47,13 @@ def create_movie_dictionary(object_list: list) -> list:
     for i in range(len(object_list)):
         m_list.append({
             "addedAt": object_list[i].addedAt,
-            "Title": object_list[i].title.title(),
+            "Title": object_list[i].title,
+            "Original Title": object_list[i].originalTitle,
             "Year": object_list[i].year,
             "Duration(minutes)": round((object_list[i].duration * 0.00001666667)),
             "Rating": object_list[i].rating,
-            "Genres": genre_string(object_list[i].genres),
+            "Genres": property_list_to_string(object_list[i].genres),
+            "Directors": property_list_to_string(object_list[i].directors),
             "Studio": object_list[i].studio,
             "Content Rating": object_list[i].contentRating,
             "Video Resolution": object_list[i].media[0].videoResolution,
@@ -61,6 +63,8 @@ def create_movie_dictionary(object_list: list) -> list:
             "Aspect Ratio": object_list[i].media[0].aspectRatio,
             "Audio Channels": object_list[i].media[0].audioChannels,
             "Audio Codec": object_list[i].media[0].audioCodec,
+            "Audio Profile": object_list[i].media[0].audioProfile,
+            "Bitrate": object_list[i].media[0].bitrate,
             "Size (GB)": round(object_list[i].media[0].parts[0].size / 1073741824, 2),
             "LocationOnDisk": object_list[i].media[0].parts[0].file
         })
@@ -74,7 +78,7 @@ print("\nThere are a total of ", len(movie_list), "movies in the selected librar
 
 # Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
 try:
-    with open(f'movies-{datetime.now()}.csv', 'w') as movies_csv:
+    with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H:%M:%S")}.csv', 'w') as movies_csv:
         writer = csv.DictWriter(movies_csv, fieldnames=labels)
         writer.writeheader()
         for elem in movie_list:
