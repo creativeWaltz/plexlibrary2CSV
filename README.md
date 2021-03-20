@@ -1,10 +1,10 @@
 # PlexExportCSV
-This script connects to your local Plex Media server and exports metadata from your libraries to a CSV file. 
+This script connects to your local Plex Media server and exports metadata from your libraries to a CSV file.<br />
 This file can be imported to Excel or Google sheets to inspect the information about your library files. 
 
 Currently works for your movie libraries. TV shows coming soon.
 
-Made possible by the great work of the guys at [plexapi](https://python-plexapi.readthedocs.io/en/latest/index.html)
+Made possible by the great work of the guys at [Python-PlexAPI](https://python-plexapi.readthedocs.io/en/latest/index.html)
 
 Created by creativeWaltz and mleo40
  
@@ -15,7 +15,8 @@ Created by creativeWaltz and mleo40
    * [Linux](https://installpython3.com/linux/)  
    * [Chromebook](https://installpython3.com/chromebook/)
    
-### Plex Api
+### Python-PlexAPI
+[plexapi](https://python-plexapi.readthedocs.io/en/latest/index.html)
  ```
  pip3 install plexapi
  ```
@@ -39,8 +40,12 @@ PLEX_TOKEN="xxxxxxxxxxxxxxxxxxxx"
 
 3. A new page will open. Click on the URL and navigate to the end. You will find your Authentication token.
 ![3-get-token](https://user-images.githubusercontent.com/71404312/111868426-a8b9f100-8971-11eb-926b-57431455769b.jpg)
-
 4. Add the authentication token to the ```plexExportCSV_config.py``` you created.
+
+### Running the script
+1. Ensure ```plexExportCSV.py``` and ```plexExportCSV_config.py``` are in the same directory/folder
+2. Run ```plexExportCSV.py``` with the command ```$ python3 plexExportCSV_config.py```
+3. You can find the file in the same directory/folder as the scipt
 
 
 
