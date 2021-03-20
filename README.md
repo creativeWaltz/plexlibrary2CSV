@@ -39,7 +39,8 @@ PLEX_TOKEN="xxxxxxxxxxxxxxxxxxxx"
 ![2-view-xml](https://user-images.githubusercontent.com/71404312/111868420-a22b7980-8971-11eb-85a0-8e73c3f8d5d4.jpg)
 
 3. A new page will open. Click on the URL and navigate to the end. You will find your Authentication token.
-![3-get-token](https://user-images.githubusercontent.com/71404312/111868426-a8b9f100-8971-11eb-926b-57431455769b.jpg)
+![3-get-token](https://user-images.githubusercontent.com/71404312/111868774-ba9c9380-8973-11eb-9aa8-af47071d2269.jpg)
+
 4. Add the authentication token to the ```plexExportCSV_config.py``` you created.
 
 ### Running the script
