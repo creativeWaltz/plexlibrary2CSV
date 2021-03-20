@@ -1,11 +1,10 @@
-# import modules and dependencies
 from plexapi.server import PlexServer
-# from plexapi.media import Media
+import plexapi.exceptions
 import csv
 from datetime import datetime
-
-# Import your custom config/auth file:
+import sys
 import plexExportCSV_config
+import requests
 
 # Your plex credentials
 PLEX_URL = plexExportCSV_config.PLEX_URL
@@ -15,9 +14,16 @@ PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
 MOVIE_LIBRARIES_TO_EXPORT = ['movies']
 
 # Create plex server instance
-plex = PlexServer(PLEX_URL, PLEX_TOKEN)
-print("\nConnecting to your server...")
-print("\nGenerating movie list from selected libraries,please wait...")
+try:
+    print("Connecting to server...")
+    plex = PlexServer(PLEX_URL, PLEX_TOKEN)
+    print("Connected")
+except plexapi.exceptions.Unauthorized:
+    print("Your Plex Token is invalid")
+    sys.exit()
+except requests.exceptions.ConnectTimeout:
+    print(f"The connection timed out, is {PLEX_URL} correct?")
+    sys.exit()
 
 
 # Functions
@@ -37,9 +43,9 @@ def create_movie_object_list(plex_movie_libraries: list) -> list:
 
 
 def create_movie_dictionary(object_list: list) -> list:
-    movielist = []
+    m_list = []
     for i in range(len(object_list)):
-        movielist.append({
+        m_list.append({
             "addedAt": object_list[i].addedAt,
             "Title": object_list[i].title.title(),
             "Year": object_list[i].year,
@@ -58,18 +64,15 @@ def create_movie_dictionary(object_list: list) -> list:
             "Size (GB)": round(object_list[i].media[0].parts[0].size / 1073741824, 2),
             "LocationOnDisk": object_list[i].media[0].parts[0].file
         })
-    return movielist
+    return m_list
 
 
 movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
 movie_list = (create_movie_dictionary(movie_objects))
-
-# Create the labels from they keys of the dictionary of the first movie
 labels = [key for key in movie_list[0]]
-
 print("\nThere are a total of ", len(movie_list), "movies in the selected libraries")
 
-# Write the dictionary to a csv
+# Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
 try:
     with open(f'movies-{datetime.now()}.csv', 'w') as movies_csv:
         writer = csv.DictWriter(movies_csv, fieldnames=labels)
