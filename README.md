@@ -48,6 +48,9 @@ PLEX_TOKEN="xxxxxxxxxxxxxxxxxxxx"
 2. Run ```plexExportCSV.py``` with the command ```$ python3 plexExportCSV_config.py```
 3. You can find the file in the same directory/folder as the scipt
 
+### Limitations
+The script currently assumes that each of your movie files has only one video file in the container. Not an issue for mp4's I believe but possibly for mkvs.
+
 
 
 
