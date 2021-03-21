@@ -46,29 +46,10 @@ def create_movie_dictionary(object_list: list) -> list:
     m_list = []
     for i in range(len(object_list)):
         m_list.append({
-            "addedAt": object_list[i].addedAt,
-            "Title": object_list[i].title,
-           # "Original Title": object_list[i].originalTitle, this will slow the script down 
-            "Year": object_list[i].year,
-            "Duration(minutes)": round((object_list[i].duration * 0.00001666667)),
-            "Rating": object_list[i].rating,
-            "Genres": property_list_to_string(object_list[i].genres),
-            "Directors": property_list_to_string(object_list[i].directors),
-            "Studio": object_list[i].studio,
-            "Content Rating": object_list[i].contentRating,
-            "Video Resolution": object_list[i].media[0].videoResolution,
-            "Video Codec": object_list[i].media[0].videoCodec,
-            "Video Profile": object_list[i].media[0].videoProfile,
-            "Container": object_list[i].media[0].container,
-            "Aspect Ratio": object_list[i].media[0].aspectRatio,
-            "Audio Channels": object_list[i].media[0].audioChannels,
-            "Audio Codec": object_list[i].media[0].audioCodec,
-            "Audio Profile": object_list[i].media[0].audioProfile,
-            "Bitrate": object_list[i].media[0].bitrate,
-            "Size (GB)": round(object_list[i].media[0].parts[0].size / 1073741824, 2),
-            "LocationOnDisk": object_list[i].media[0].parts[0].file
+           "Original Title": object_list[i].originalTitle  # this will slow the script down
         })
     return m_list
+
 
 print("\nGetting movie libraries information...")
 movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
