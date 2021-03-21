@@ -26,9 +26,9 @@ You'll need a running [Plex](https://www.plex.tv) server on your local network.
 
 ## Usage:
 ### Create config file
-Create/Edit the file ```plexExportCSV_config.py```.Add the following lines and save.
+Create/Edit the file ```plexExportCSV_config.py```.Add the following lines with your details and save.
 ```
-PLEX_URL="http://192.168.0.2:32400"
+PLEX_URL="http://192.168.X.X:32400"
 PLEX_TOKEN="xxxxxxxxxxxxxxxxxxxx"
 ```
 ### How to get your token
