@@ -48,7 +48,7 @@ def create_movie_dictionary(object_list: list) -> list:
         m_list.append({
             "addedAt": object_list[i].addedAt,
             "Title": object_list[i].title,
-            "Original Title": object_list[i].originalTitle,
+           # "Original Title": object_list[i].originalTitle,
             "Year": object_list[i].year,
             "Duration(minutes)": round((object_list[i].duration * 0.00001666667)),
             "Rating": object_list[i].rating,
@@ -70,22 +70,22 @@ def create_movie_dictionary(object_list: list) -> list:
         })
     return m_list
 
-print("Getting movie libraries information...")
-
+print("\nGetting movie libraries information...")
 movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
+
 movie_list = (create_movie_dictionary(movie_objects))
 labels = [key for key in movie_list[0]]
-print("\nThere are a total of ", len(movie_list), "movies in the selected libraries")
+print("\nThere are a total of ", len(movie_list), "movies in the selected libraries.")
 
 # Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
-print("Creating csv file...")
+print("\nCreating .csv file...")
 try:
     with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H:%M:%S")}.csv', 'w') as movies_csv:
         writer = csv.DictWriter(movies_csv, fieldnames=labels)
         writer.writeheader()
         for elem in movie_list:
             writer.writerow(elem)
-    print('Your CSV is ready!')
+    print('\nYour .csv is ready!')
     sys.exit()
 except IOError:
     print("I/O error")
