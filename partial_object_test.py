@@ -64,41 +64,17 @@ movie_object_list = [
     "userRating",
     "viewOffset",
     "writers",
-    "year",
-]
-
-media_object_list = [
-    "TAG",
-    "aspectRatio",
-    "audioChannels",
-    "audioCodec",
-    "audioProfile",
-    "bitrate",
-    "container",
-    "duration",
-    "height",
-    "id",
-    "has64bitOffsets",
-    "optimizedForStreaming",
-    "parts",
-    "proxyType",
-    "target",
-    "title",
-    "videoCodec",
-    "videoFrameRate",
-    "videoProfile",
-    "videoResolution",
-    "width"
+    "year"
 ]
 
 
 def full_object_attributes_video_movie(attr_list, prefix_):
     full_obj_list = []
-    for i in attr_list:
+    for _i in attr_list:
         function_movie = plex.library.section('movies').get('Mercury Rising')
-        _test_movie = getattr(function_movie, i)
+        _test_movie = getattr(function_movie, _i)
         if function_movie.isFullObject() is True:
-            full_obj_list.append((prefix_ + "." + i))
+            full_obj_list.append((prefix_ + "." + _i))
     return full_obj_list
 
 
