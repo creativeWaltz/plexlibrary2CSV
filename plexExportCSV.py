@@ -70,7 +70,6 @@ def create_movie_dictionary(object_list: list) -> list:
     return m_list
 
 
-
 print("\nGetting movie libraries information...")
 movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
 
