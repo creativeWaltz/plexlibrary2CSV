@@ -51,6 +51,8 @@ PLEX_TOKEN="xxxxxxxxxxxxxxxxxxxx"
 ### Limitations
 The script currently assumes that each of your movie files has only one video file in the container. Not an issue for mp4's I believe but possibly for mkvs.
 
+The way the Plex api works is it will only return a partial amount of information for each movie. Extra attributes such as "Original Title" (e.g the title of an Japanese movie) will require the movie to be reloaded to get the full amount of information. If this is selected it will reload each movie in your library again increasing the amount of time the script takes to run. In testing, a normal run is ~20 seconds for a library of 2500 movies. With the extra calls it takes 4 minutes.
+
 
 
 
