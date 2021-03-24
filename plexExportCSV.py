@@ -1,3 +1,6 @@
+
+# version 0.1.0
+
 from plexapi.server import PlexServer
 from datetime import datetime
 import plexapi.exceptions
