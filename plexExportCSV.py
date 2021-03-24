@@ -15,7 +15,7 @@ MOVIES_or_TV = ()
 while MOVIES_or_TV not in ('movies', 'tv', 'MOVIES', 'TV'):
     MOVIES_or_TV = input('Would you like info on movies or TV shows?\n'
                          '(enter movies or TV): '
-                        )
+                         )
 
 # ask user for list of plex "channels" based on selection above
 if MOVIES_or_TV.lower() == 'movies':
@@ -26,7 +26,7 @@ if MOVIES_or_TV.lower() == 'movies':
 elif MOVIES_or_TV.lower() == 'tv':
     TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
                                '(comma separated list): '
-                              )
+                               )
     TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
 
 # Create plex server instance
@@ -88,9 +88,13 @@ def create_movie_dictionary(object_list: list) -> list:
 
 print("\nGetting movie libraries information...")
 try:
+
     movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
-except:
+except NameError:
     print(f"\nThat Plex movie {MOVIE_LIBRARIES_TO_EXPORT} selection is invalid")
+    sys.exit(1)
+except plexapi.exceptions.NotFound:
+    print(f"\nThe library {MOVIE_LIBRARIES_TO_EXPORT} is invalid")
     sys.exit(1)
 
 movie_list = (create_movie_dictionary(movie_objects))
