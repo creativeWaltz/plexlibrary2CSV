@@ -48,7 +48,6 @@ def create_movie_dictionary(object_list: list) -> list:
         m_list.append({
             "addedAt": object_list[i].addedAt,
             "Title": object_list[i].title,
-           # "Original Title": object_list[i].originalTitle, this will slow the script down 
             "Year": object_list[i].year,
             "Duration(minutes)": round((object_list[i].duration * 0.00001666667)),
             "Rating": object_list[i].rating,
@@ -69,6 +68,7 @@ def create_movie_dictionary(object_list: list) -> list:
             "LocationOnDisk": object_list[i].media[0].parts[0].file
         })
     return m_list
+
 
 print("\nGetting movie libraries information...")
 movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
