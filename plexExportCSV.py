@@ -88,7 +88,6 @@ def create_movie_dictionary(object_list: list) -> list:
 
 print("\nGetting movie libraries information...")
 try:
-
     movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
 except NameError:
     print(f"\nThat Plex movie {MOVIE_LIBRARIES_TO_EXPORT} selection is invalid")
