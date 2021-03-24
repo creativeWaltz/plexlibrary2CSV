@@ -10,8 +10,24 @@ import requests
 PLEX_URL = plexExportCSV_config.PLEX_URL
 PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
 
-# should show a list of existing folders for user to select from:
-MOVIE_LIBRARIES_TO_EXPORT = ['movies']
+# ask user for movie vs tv shows -- plex api has different stuff for each
+MOVIES_or_TV = ()
+while MOVIES_or_TV not in ('movies', 'tv', 'MOVIES', 'TV'):
+    MOVIES_or_TV = input('Would you like info on movies or TV shows?\n'
+                         '(enter movies or TV): '
+                        )
+
+# ask user for list of plex "channels" based on selection above
+if MOVIES_or_TV.lower() == 'movies':
+    MOVIE_LIBRARIES_TO_EXPORT = input('Which Plex Movie Channel(s) would you like to export.\n'
+                                      '(comma separated list): '
+                                      )
+    MOVIE_LIBRARIES_TO_EXPORT = [MOVIE_LIBRARIES_TO_EXPORT]
+elif MOVIES_or_TV.lower() == 'tv':
+    TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
+                               '(comma separated list): '
+                              )
+    TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
 
 # Create plex server instance
 try:
@@ -71,7 +87,11 @@ def create_movie_dictionary(object_list: list) -> list:
     return m_list
 
 print("\nGetting movie libraries information...")
-movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
+try:
+    movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
+except:
+    print(f"\nThat Plex movie {MOVIE_LIBRARIES_TO_EXPORT} selection is invalid")
+    sys.exit(1)
 
 movie_list = (create_movie_dictionary(movie_objects))
 labels = [key for key in movie_list[0]]
