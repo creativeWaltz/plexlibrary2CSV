@@ -1,45 +1,11 @@
 from plexapi.server import PlexServer
 from datetime import datetime
 import plexapi.exceptions
+import plexapi.library
 import csv
 import sys
 import plexExportCSV_config
 import requests
-
-# Your plex credentials
-PLEX_URL = plexExportCSV_config.PLEX_URL
-PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
-
-# ask user for movie vs tv shows -- plex api has different stuff for each
-MOVIES_or_TV = ()
-while MOVIES_or_TV not in ('movies', 'tv', 'MOVIES', 'TV'):
-    MOVIES_or_TV = input('Would you like info on movies or TV shows?\n'
-                         '(enter movies or TV): '
-                         )
-
-# ask user for list of plex "channels" based on selection above
-if MOVIES_or_TV.lower() == 'movies':
-    MOVIE_LIBRARIES_TO_EXPORT = input('Which Plex Movie Channel(s) would you like to export.\n'
-                                      '(comma separated list): '
-                                      )
-    MOVIE_LIBRARIES_TO_EXPORT = [MOVIE_LIBRARIES_TO_EXPORT]
-elif MOVIES_or_TV.lower() == 'tv':
-    TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
-                               '(comma separated list): '
-                               )
-    TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
-
-# Create plex server instance
-try:
-    print("Connecting to server...")
-    plex = PlexServer(PLEX_URL, PLEX_TOKEN)
-    print("Connected")
-except plexapi.exceptions.Unauthorized:
-    print("Your Plex Token is invalid")
-    sys.exit()
-except requests.exceptions.ConnectTimeout:
-    print(f"The connection timed out, is {PLEX_URL} correct?")
-    sys.exit()
 
 
 # Functions
@@ -85,6 +51,51 @@ def create_movie_dictionary(object_list: list) -> list:
         })
     return m_list
 
+
+def display_movie_libraries():
+    library = plex.library.sections()
+    library_list = []
+    for i in library:
+        if isinstance(i, plexapi.library.MovieSection):
+            library_list.append(i.title)
+    print("The following Movie libraries are available to export: \n", library_list)
+
+
+# Your plex credentials
+PLEX_URL = plexExportCSV_config.PLEX_URL
+PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
+
+# Create plex server instance
+try:
+    print("Connecting to server...")
+    plex = PlexServer(PLEX_URL, PLEX_TOKEN)
+    print("Connected")
+except plexapi.exceptions.Unauthorized:
+    print("Your Plex Token is invalid")
+    sys.exit()
+except requests.exceptions.ConnectTimeout:
+    print(f"The connection timed out, is {PLEX_URL} correct?")
+    sys.exit()
+
+# ask user for movie vs tv shows -- plex api has different stuff for each
+MOVIES_or_TV = ()
+while MOVIES_or_TV not in ('movies', 'tv', 'MOVIES', 'TV'):
+    MOVIES_or_TV = input('Would you like info on movies or tv shows?\n'
+                         '(enter movies or tv): '
+                         )
+
+# ask user for list of plex "channels" based on selection above
+if MOVIES_or_TV.lower() == 'movies':
+    display_movie_libraries()
+    MOVIE_LIBRARIES_TO_EXPORT = input('Which Plex Movie Channel(s) would you like to export.\n'
+                                      '(comma separated list): '
+                                      )
+    MOVIE_LIBRARIES_TO_EXPORT = [MOVIE_LIBRARIES_TO_EXPORT]
+elif MOVIES_or_TV.lower() == 'tv':
+    TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
+                               '(comma separated list): '
+                               )
+    TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
 
 print("\nGetting movie libraries information...")
 try:
