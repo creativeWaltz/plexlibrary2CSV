@@ -58,7 +58,7 @@ def display_movie_libraries():
     for i in library:
         if isinstance(i, plexapi.library.MovieSection):
             library_list.append(i.title)
-    print("The following Movie libraries are available to export: \n", library_list)
+    print("The following Movie libraries are available for export: \n", library_list)
 
 
 # Your plex credentials
@@ -69,7 +69,7 @@ PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
 try:
     print("Connecting to server...")
     plex = PlexServer(PLEX_URL, PLEX_TOKEN)
-    print("Connected")
+    print("Connected!")
 except plexapi.exceptions.Unauthorized:
     print("Your Plex Token is invalid")
     sys.exit()
@@ -78,33 +78,35 @@ except requests.exceptions.ConnectTimeout:
     sys.exit()
 
 # ask user for movie vs tv shows -- plex api has different stuff for each
-MOVIES_or_TV = ()
-while MOVIES_or_TV not in ('movies', 'tv', 'MOVIES', 'TV'):
-    MOVIES_or_TV = input('Would you like info on movies or tv shows?\n'
+movies_or_tv = ()
+while movies_or_tv not in ('movies', 'tv'):
+    movies_or_tv = input('Would you like to export movie or tv information?\n'
                          '(enter movies or tv): '
                          )
 
 # ask user for list of plex "channels" based on selection above
-if MOVIES_or_TV.lower() == 'movies':
+if movies_or_tv.lower() == 'movies':
     display_movie_libraries()
-    MOVIE_LIBRARIES_TO_EXPORT = input('Which Plex Movie Channel(s) would you like to export.\n'
-                                      '(comma separated list): '
-                                      )
-    MOVIE_LIBRARIES_TO_EXPORT = [MOVIE_LIBRARIES_TO_EXPORT]
-elif MOVIES_or_TV.lower() == 'tv':
+    libraries_to_export = input('Which Plex Movie Channel(s) would you like to export.\n'
+                                '(comma separated list): '
+                                )
+    libraries_to_export = libraries_to_export.split(',')
+    movie_libraries_to_export = [i.strip() for i in libraries_to_export]
+elif movies_or_tv.lower() == 'tv':
     TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
                                '(comma separated list): '
                                )
     TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
 
 print("\nGetting movie libraries information...")
+
 try:
-    movie_objects = create_movie_object_list(MOVIE_LIBRARIES_TO_EXPORT)
+    movie_objects = create_movie_object_list(movie_libraries_to_export)
 except NameError:
-    print(f"\nThat Plex movie {MOVIE_LIBRARIES_TO_EXPORT} selection is invalid")
+    print(f"\nThat Plex movie {movie_libraries_to_export} selection is invalid")
     sys.exit(1)
 except plexapi.exceptions.NotFound:
-    print(f"\nThe library {MOVIE_LIBRARIES_TO_EXPORT} is invalid")
+    print(f"\nThe library {movie_libraries_to_export} is invalid")
     sys.exit(1)
 
 movie_list = (create_movie_dictionary(movie_objects))
