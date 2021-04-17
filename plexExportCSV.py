@@ -64,11 +64,21 @@ def display_movie_libraries():
     print("The following Movie libraries are available for export: \n", library_list)
 
 
+def display_tv_shows():
+    show_list = []
+    library = plex.library.section('TV Shows')
+    for show in library.all():
+        show_list.append(show.title)
+
+    return show_list
+
+
 # Your plex credentials
 PLEX_URL = plexExportCSV_config.PLEX_URL
 PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
 
 # Create plex server instance
+# this should be a class
 try:
     print("Connecting to server...")
     plex = PlexServer(PLEX_URL, PLEX_TOKEN)
@@ -81,11 +91,12 @@ except requests.exceptions.ConnectTimeout:
     sys.exit()
 
 # ask user for movie vs tv shows -- plex api has different stuff for each
+# this should be the "first" function
 movies_or_tv = ()
 while movies_or_tv not in ('movies', 'tv'):
     movies_or_tv = input('Would you like to export movie or tv information?\n'
                          '(enter movies or tv): '
-                         )
+                        )
 
 # ask user for list of plex "channels" based on selection above
 if movies_or_tv.lower() == 'movies':
@@ -95,11 +106,13 @@ if movies_or_tv.lower() == 'movies':
                                 )
     libraries_to_export = libraries_to_export.split(',')
     movie_libraries_to_export = [i.strip() for i in libraries_to_export]
+
 elif movies_or_tv.lower() == 'tv':
-    TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
-                               '(comma separated list): '
+    print(display_tv_shows())
+    tv_shows_to_export = input('Which Plex TV Show(s) would you like to export.\n'
+                               '(comma separated list, blank for all): '
                                )
-    TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
+    print(tv_shows_to_export)
 
 print("\nGetting movie libraries information...")
 
@@ -129,3 +142,5 @@ try:
 except IOError:
     print("I/O error")
     sys.exit()
+
+
