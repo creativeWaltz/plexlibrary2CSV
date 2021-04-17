@@ -113,6 +113,7 @@ elif movies_or_tv.lower() == 'tv':
                                '(comma separated list, blank for all): '
                                )
     print(tv_shows_to_export)
+    quit()
 
 print("\nGetting movie libraries information...")
 
