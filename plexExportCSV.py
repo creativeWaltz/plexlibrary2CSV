@@ -102,37 +102,39 @@ if movies_or_tv.lower() == 'movies':
                                 )
     libraries_to_export = libraries_to_export.split(',')
     movie_libraries_to_export = [i.strip() for i in libraries_to_export]
+
+    try:
+        movie_objects = create_movie_object_list(movie_libraries_to_export)
+    except NameError:
+        print(f"\nThat Plex movie {movie_libraries_to_export} selection is invalid")
+        sys.exit(1)
+    except plexapi.exceptions.NotFound:
+        print(f"\nThe library {movie_libraries_to_export} is invalid")
+        sys.exit(1)
+
+    movie_list = (create_movie_dictionary(movie_objects))
+    labels = [key for key in movie_list[0]]
+    print("\nThere are a total of ", len(movie_list), "movies in the selected libraries.")
+
+    # Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
+    print("\nCreating .csv file...")
+    try:
+        with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H.%M.%S")}.csv', 'w') as movies_csv:
+            writer = csv.DictWriter(movies_csv, fieldnames=labels)
+            writer.writeheader()
+            for elem in movie_list:
+                writer.writerow(elem)
+        print('\nYour .csv is ready!')
+        sys.exit()
+    except IOError:
+        print("I/O error")
+        sys.exit()
+
+
 elif movies_or_tv.lower() == 'tv':
-    TV_SHOWS_TO_EXPORT = input('Which Plex TV Channel(s) would you like to export.\n'
-                               '(comma separated list): '
-                               )
-    TV_SHOWS_TO_EXPORT = [TV_SHOWS_TO_EXPORT]
+    libraries_to_export = input('Which Plex TV Channel(s) would you like to export.\n'
+                                '(comma separated list): '
+                                )
+    tv_libraries_to_export = [i.strip() for i in libraries_to_export]
 
-print("\nGetting movie libraries information...")
-
-try:
-    movie_objects = create_movie_object_list(movie_libraries_to_export)
-except NameError:
-    print(f"\nThat Plex movie {movie_libraries_to_export} selection is invalid")
-    sys.exit(1)
-except plexapi.exceptions.NotFound:
-    print(f"\nThe library {movie_libraries_to_export} is invalid")
-    sys.exit(1)
-
-movie_list = (create_movie_dictionary(movie_objects))
-labels = [key for key in movie_list[0]]
-print("\nThere are a total of ", len(movie_list), "movies in the selected libraries.")
-
-# Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
-print("\nCreating .csv file...")
-try:
-    with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H.%M.%S")}.csv', 'w') as movies_csv:
-        writer = csv.DictWriter(movies_csv, fieldnames=labels)
-        writer.writeheader()
-        for elem in movie_list:
-            writer.writerow(elem)
-    print('\nYour .csv is ready!')
-    sys.exit()
-except IOError:
-    print("I/O error")
-    sys.exit()
+print("\nGetting selected libraries information...")
