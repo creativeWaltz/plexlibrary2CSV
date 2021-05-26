@@ -71,6 +71,15 @@ def display_movie_libraries():
     print("The following Movie libraries are available for export: \n", library_list)
 
 
+def display_tv_libraries():
+    library = plex.library.sections()
+    library_list = []
+    for i in library:
+        if isinstance(i, plexapi.library.ShowSection):
+            library_list.append(i.title)
+    print("The following TV libraries are available for export: \n", library_list)
+
+
 # Your plex credentials
 PLEX_URL = plexExportCSV_config.PLEX_URL
 PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
@@ -142,6 +151,7 @@ if movies_or_tv.lower() == 'movies':
 
 
 elif movies_or_tv.lower() == 'tv':
+    display_tv_libraries()
     libraries_to_export = input('Which TV libraries would you like to export?\n'
                                 '(comma separated list): '
                                 )
