@@ -116,7 +116,7 @@ print("\nThere are a total of ", len(movie_list), "movies in the selected librar
 # Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
 print("\nCreating .csv file...")
 try:
-    with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H:%M:%S")}.csv', 'w') as movies_csv:
+    with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H-%M-%S")}.csv', 'w') as movies_csv:
         writer = csv.DictWriter(movies_csv, fieldnames=labels)
         writer.writeheader()
         for elem in movie_list:
