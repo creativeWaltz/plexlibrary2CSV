@@ -1,5 +1,6 @@
 plexExportCSV_config.py
 movies*.csv
+tv*.csv
 __pycache__
 venv
 .idea

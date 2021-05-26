@@ -150,7 +150,6 @@ elif movies_or_tv.lower() == 'tv':
 
     try:
         tv_objects = create_movie_object_list(tv_libraries_to_export)
-        print(tv_objects)
     except NameError:
         print(f"\nThat Plex movie {tv_libraries_to_export} selection is invalid")
         sys.exit(1)
@@ -160,7 +159,20 @@ elif movies_or_tv.lower() == 'tv':
 
     tv_list = (create_tv_dictionary(tv_objects))
     labels = [key for key in tv_list[0]]
-    print("\nThere are a total of ", len(tv_list), "movies in the selected libraries.")
+    print("\nThere are a total of ", len(tv_list), "shows in the selected libraries.")
+
+    print("\nCreating .csv file...")
+    try:
+        with open(f'tv-{datetime.now().strftime("%Y-%m-%d-%H.%M.%S")}.csv', 'w') as tv_csv:
+            writer = csv.DictWriter(tv_csv, fieldnames=labels)
+            writer.writeheader()
+            for elem in tv_list:
+                writer.writerow(elem)
+        print('\nYour .csv is ready!')
+        sys.exit()
+    except IOError:
+        print("I/O error")
+        sys.exit()
 
 
 
