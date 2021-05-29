@@ -17,11 +17,23 @@ def property_list_to_string(property_list: list) -> str:
     return new_string
 
 
-def create_movie_object_list(plex_movie_libraries: list) -> list:
+def create_object_list(plex_libraries: list) -> list:
     object_list = []
-    for library in plex_movie_libraries:
+    for library in plex_libraries:
         object_list.extend(plex.library.section(library).all())
     return object_list
+
+
+def display_libraries():
+    library = plex.library.sections()
+    library_list = []
+    for i in library:
+        if movies_or_tv.lower() == 'movies' and isinstance(i, plexapi.library.MovieSection):
+            library_list.append(i.title)
+        elif movies_or_tv.lower() == 'tv' and isinstance(i, plexapi.library.ShowSection):
+            library_list.append(i.title)
+
+    print("The following libraries are available for export: \n", library_list)
 
 
 def create_movie_dictionary(object_list: list) -> list:
@@ -62,22 +74,6 @@ def create_tv_dictionary(object_list: list) -> list:
     return tv_list
 
 
-def display_movie_libraries():
-    library = plex.library.sections()
-    library_list = []
-    for i in library:
-        if isinstance(i, plexapi.library.MovieSection):
-            library_list.append(i.title)
-    print("The following Movie libraries are available for export: \n", library_list)
-
-
-def display_tv_libraries():
-    library = plex.library.sections()
-    library_list = []
-    for i in library:
-        if isinstance(i, plexapi.library.ShowSection):
-            library_list.append(i.title)
-    print("The following TV libraries are available for export: \n", library_list)
 
 
 # Your plex credentials
@@ -115,7 +111,7 @@ while movies_or_tv not in ('movies', 'tv'):
 
 # ask user for list of plex "channels" based on selection above
 if movies_or_tv.lower() == 'movies':
-    display_movie_libraries()
+    display_libraries()
     libraries_to_export = input('Which Plex Movie Channel(s) would you like to export.\n'
                                 '(comma separated list): '
                                 )
@@ -123,7 +119,7 @@ if movies_or_tv.lower() == 'movies':
     movie_libraries_to_export = [i.strip() for i in libraries_to_export]
 
     try:
-        movie_objects = create_movie_object_list(movie_libraries_to_export)
+        movie_objects = create_object_list(movie_libraries_to_export)
     except NameError:
         print(f"\nThat Plex movie {movie_libraries_to_export} selection is invalid")
         sys.exit(1)
@@ -151,7 +147,7 @@ if movies_or_tv.lower() == 'movies':
 
 
 elif movies_or_tv.lower() == 'tv':
-    display_tv_libraries()
+    display_libraries()
     libraries_to_export = input('Which TV libraries would you like to export?\n'
                                 '(comma separated list): '
                                 )
@@ -159,7 +155,7 @@ elif movies_or_tv.lower() == 'tv':
     tv_libraries_to_export = [i.strip() for i in libraries_to_export]
 
     try:
-        tv_objects = create_movie_object_list(tv_libraries_to_export)
+        tv_objects = create_object_list(tv_libraries_to_export)
     except NameError:
         print(f"\nThat Plex movie {tv_libraries_to_export} selection is invalid")
         sys.exit(1)
