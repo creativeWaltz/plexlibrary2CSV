@@ -187,7 +187,7 @@ elif movies_or_tv.lower() == 'tv':
 
     tv_list = (create_tv_dictionary(tv_objects))
     labels = [key for key in tv_list[0]]
-    print("\nThere are a total of ", len(tv_list), "episodes in the selected libraries.")
+    print("\nThere are a total of ", len(tv_objects), "shows and ",len(tv_list), " episodes in the selected libraries.")
 
     print("\nCreating .csv file...")
     try:
