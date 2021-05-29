@@ -10,6 +10,7 @@ import requests
 
 # Functions
 def property_list_to_string(property_list: list) -> str:
+    """convert list to a string for directors, genres etc"""
     tidy_list = []
     for item in property_list:
         tidy_list.append(item.tag)
@@ -18,6 +19,7 @@ def property_list_to_string(property_list: list) -> str:
 
 
 def create_object_list(plex_libraries: list) -> list:
+    """creates a list of items in the libraries the user selected"""
     object_list = []
     for library in plex_libraries:
         object_list.extend(plex.library.section(library).all())
@@ -25,6 +27,7 @@ def create_object_list(plex_libraries: list) -> list:
 
 
 def display_libraries():
+    """Show which libraries a user can select for export"""
     library = plex.library.sections()
     library_list = []
     for i in library:
@@ -37,40 +40,43 @@ def display_libraries():
 
 
 def create_movie_dictionary(object_list: list) -> list:
+    """create the movie dictionary with fields required for csv"""
     m_list = []
-    for i in range(len(object_list)):
+    for movie in object_list:
         m_list.append({
-            "addedAt": object_list[i].addedAt,
-            "Title": object_list[i].title,
-            "Year": object_list[i].year,
-            "Duration(minutes)": round((object_list[i].duration * 0.00001666667)),
-            "Rating": object_list[i].rating,
-            "Genres": property_list_to_string(object_list[i].genres),
-            "Directors": property_list_to_string(object_list[i].directors),
-            "Studio": object_list[i].studio,
-            "Content Rating": object_list[i].contentRating,
-            "Video Resolution": object_list[i].media[0].videoResolution,
-            "Video Codec": object_list[i].media[0].videoCodec,
-            "Video Profile": object_list[i].media[0].videoProfile,
-            "Container": object_list[i].media[0].container,
-            "Aspect Ratio": object_list[i].media[0].aspectRatio,
-            "Audio Channels": object_list[i].media[0].audioChannels,
-            "Audio Codec": object_list[i].media[0].audioCodec,
-            "Audio Profile": object_list[i].media[0].audioProfile,
-            "Bitrate": object_list[i].media[0].bitrate,
-            "Size (GB)": round(object_list[i].media[0].parts[0].size / 1073741824, 2),
-            "LocationOnDisk": object_list[i].media[0].parts[0].file
+            "addedAt": movie.addedAt,
+            "Title": movie.title,
+            "Year": movie.year,
+            "Duration(minutes)": round((movie.duration * 0.00001666667)),
+            "Rating": movie.rating,
+            "Genres": property_list_to_string(movie.genres),
+            "Directors": property_list_to_string(movie.directors),
+            "Studio": movie.studio,
+            "Content Rating": movie.contentRating,
+            "Video Resolution": movie.media[0].videoResolution,
+            "Video Codec": movie.media[0].videoCodec,
+            "Video Profile": movie.media[0].videoProfile,
+            "Container": movie.media[0].container,
+            "Aspect Ratio": movie.media[0].aspectRatio,
+            "Audio Channels": movie.media[0].audioChannels,
+            "Audio Codec": movie.media[0].audioCodec,
+            "Audio Profile": movie.media[0].audioProfile,
+            "Bitrate": movie.media[0].bitrate,
+            "Size (GB)": round(movie.media[0].parts[0].size / 1073741824, 2),
+            "Locationon disk": movie.media[0].parts[0].file
+
         })
     return m_list
 
 def create_tv_dictionary(object_list: list) -> list:
+    """create the tv episode dictionary with fields required for csv"""
     episode_list = []
     for show in (object_list):
         for episode in show.episodes():
             episode_list.append({
                 "Title": episode.grandparentTitle,
                 "Season": episode.parentIndex,
-                "Duration": episode.duration,
+                "Duration": round((episode.duration * 0.00001666667)),
                 "Episode Rating": episode.rating,
                 "Episode Year": episode.year,
                 "Video Resolution": episode.media[0].videoResolution,
@@ -83,7 +89,7 @@ def create_tv_dictionary(object_list: list) -> list:
                 "Audio Profile": episode.media[0].audioProfile,
                 "Bitrate": episode.media[0].bitrate,
                 "Size (GB)": round(episode.media[0].parts[0].size / 1073741824, 2),
-                "LocationOnDisk": episode.media[0].parts[0].file
+                "Location on disk": episode.media[0].parts[0].file
           })
 
       
@@ -92,7 +98,7 @@ def create_tv_dictionary(object_list: list) -> list:
 
 
 
-# Your plex credentials
+# Plex credentials
 PLEX_URL = plexExportCSV_config.PLEX_URL
 PLEX_TOKEN = plexExportCSV_config.PLEX_TOKEN
 
@@ -118,14 +124,14 @@ except requests.exceptions.ConnectTimeout:
     print(f"The connection timed out, is {PLEX_URL} correct?")
     sys.exit()
 
-# ask user for movie vs tv shows -- plex api has different stuff for each
+# ask user for movie vs tv shows -- plex api has different data for each
 movies_or_tv = ()
 while movies_or_tv not in ('movies', 'tv'):
     movies_or_tv = input('Would you like to export movie or tv information?\n'
                          '(enter movies or tv): '
                          )
 
-# ask user for list of plex "channels" based on selection above
+# ask user for which libraries they would like to export
 if movies_or_tv.lower() == 'movies':
     display_libraries()
     libraries_to_export = input('Which Plex Movie Channel(s) would you like to export.\n'
@@ -147,7 +153,7 @@ if movies_or_tv.lower() == 'movies':
     labels = [key for key in movie_list[0]]
     print("\nThere are a total of ", len(movie_list), "movies in the selected libraries.")
 
-    # Create the labels from they keys of the dictionary of the first movie# Write the dictionary to a csv
+    # Create the labels from they keys of the dictionary of the first movie and write to a csv
     print("\nCreating .csv file...")
     try:
         with open(f'movies-{datetime.now().strftime("%Y-%m-%d-%H.%M.%S")}.csv', 'w') as movies_csv:
