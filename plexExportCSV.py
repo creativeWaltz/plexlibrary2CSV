@@ -64,14 +64,30 @@ def create_movie_dictionary(object_list: list) -> list:
     return m_list
 
 def create_tv_dictionary(object_list: list) -> list:
-    tv_list = []
-    for i in range(len(object_list)):
-        tv_list.append({
-            "addedAt": object_list[i].addedAt,
-            "Title": object_list[i].title,
-            "Year": object_list[i].year,
-        })
-    return tv_list
+    episode_list = []
+    for show in (object_list):
+        for episode in show.episodes():
+            episode_list.append({
+                "Title": episode.grandparentTitle,
+                "Season": episode.parentIndex,
+                "Duration": episode.duration,
+                "Episode Rating": episode.rating,
+                "Episode Year": episode.year,
+                "Video Resolution": episode.media[0].videoResolution,
+                "Video Codec": episode.media[0].videoCodec,
+                "Video Profile": episode.media[0].videoProfile,
+                "Container": episode.media[0].container,
+                "Aspect Ratio": episode.media[0].aspectRatio,
+                "Audio Channels": episode.media[0].audioChannels,
+                "Audio Codec": episode.media[0].audioCodec,
+                "Audio Profile": episode.media[0].audioProfile,
+                "Bitrate": episode.media[0].bitrate,
+                "Size (GB)": round(episode.media[0].parts[0].size / 1073741824, 2),
+                "LocationOnDisk": episode.media[0].parts[0].file
+          })
+
+      
+    return episode_list
 
 
 
@@ -165,11 +181,11 @@ elif movies_or_tv.lower() == 'tv':
 
     tv_list = (create_tv_dictionary(tv_objects))
     labels = [key for key in tv_list[0]]
-    print("\nThere are a total of ", len(tv_list), "shows in the selected libraries.")
+    print("\nThere are a total of ", len(tv_list), "episodes in the selected libraries.")
 
     print("\nCreating .csv file...")
     try:
-        with open(f'tv-{datetime.now().strftime("%Y-%m-%d-%H.%M.%S")}.csv', 'w') as tv_csv:
+        with open(f'tv-episodes-{datetime.now().strftime("%Y-%m-%d-%H.%M.%S")}.csv', 'w') as tv_csv:
             writer = csv.DictWriter(tv_csv, fieldnames=labels)
             writer.writeheader()
             for elem in tv_list:
